@@ -1,0 +1,112 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+  <div class="bg-white rounded-2xl shadow-md w-full max-w-lg p-8">
+
+    <!-- Header -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Edit User</h2>
+      <p class="text-sm text-gray-500 mt-1">Update the details of the selected user.</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center text-gray-500 py-10">
+      Loading user details...
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="successMessage"
+         class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
+      {{ successMessage }}
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage"
+         class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Edit Form -->
+    <form *ngIf="!isLoading" [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+      <!-- Full Name -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+        <input
+          type="text"
+          formControlName="fullName"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          placeholder="Enter full name"
+        />
+        <p *ngIf="editForm.get('fullName')?.invalid && editForm.get('fullName')?.touched"
+           class="text-red-500 text-xs mt-1">
+          Full name is required.
+        </p>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          placeholder="Enter email address"
+        />
+        <p *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched"
+           class="text-red-500 text-xs mt-1">
+          Please enter a valid email address.
+        </p>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Password
+          <span class="text-gray-400 font-normal ml-1">(Leave blank to keep current password)</span>
+        </label>
+        <input
+          type="password"
+          formControlName="password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          placeholder="Enter new password"
+        />
+        <p *ngIf="editForm.get('password')?.invalid && editForm.get('password')?.touched"
+           class="text-red-500 text-xs mt-1">
+          Password must be at least 8 characters.
+        </p>
+      </div>
+
+      <!-- Role -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+        <select
+          formControlName="role"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+        >
+          <option value="" disabled>Select a role</option>
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+        <p *ngIf="editForm.get('role')?.invalid && editForm.get('role')?.touched"
+           class="text-red-500 text-xs mt-1">
+          Please select a role.
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-3">
+        <button
+          type="submit"
+          [disabled]="isSubmitting"
+          class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 text-sm disabled:opacity-50">
+          {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+        </button>
+        <button
+          type="button"
+          (click)="onCancel()"
+          class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition duration-200 text-sm">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
