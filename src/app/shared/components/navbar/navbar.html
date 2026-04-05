@@ -5,14 +5,26 @@
   </div>
 
   <div class="flex items-center gap-6">
+
+    <!-- Navigation links — only visible for System Admin -->
+    <ng-container *ngIf="authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
+      <a
+        routerLink="/admin/users"
+        class="text-sm text-gray-300 hover:text-white transition duration-200">
+        Users
+      </a>
+    </ng-container>
+
     <span class="text-sm text-gray-300">
       {{ authService.getUserRole() }}
     </span>
+
     <button
       (click)="logout()"
       class="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded transition duration-200">
       Logout
     </button>
+
   </div>
 
 </nav>

@@ -6,6 +6,7 @@ import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { CreateUserComponent } from './features/admin/users/create-user/create-user';
 import { EditUserComponent } from './features/admin/users/edit-user/edit-user';
+import { UserListComponent } from './features/admin/users/user-list/user-list';
 
 export const routes: Routes = [
     // Public routes
@@ -47,6 +48,13 @@ export const routes: Routes = [
         component: EditUserComponent,
         canActivate: [roleGuard],
         data: { roles: 'ROLE_SYSTEM_ADMIN' }
+    },
+
+    {
+        path: 'admin/users',
+        component: UserListComponent,
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ROLE_SYSTEM_ADMIN'] }
     },
 
     // Unauthorized page

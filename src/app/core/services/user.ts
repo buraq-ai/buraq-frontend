@@ -53,4 +53,22 @@ export class UserService {
     });
     return this.http.put<UserResponse>(`${this.apiUrl}/users/${id}`, userData, { headers });
   }
+
+  getAllUsers(): Observable<UserResponse[]> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<UserResponse[]>(`${this.apiUrl}/users`, { headers });
+  }
+
+  deactivateUser(id: number): Observable<UserResponse> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.patch<UserResponse>(`${this.apiUrl}/users/${id}/deactivate`, {}, { headers });
+  }
 }
