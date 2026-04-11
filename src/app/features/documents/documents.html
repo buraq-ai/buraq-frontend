@@ -1,1 +1,40 @@
-<p>documents works!</p>
+<div class="relative">
+  <!-- Document List View -->
+  <app-document-list (openUpload)="openUploadDialog()"></app-document-list>
+
+  <!-- Upload Dialog Modal -->
+  @if (showUploadDialog()) {
+    <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <!-- Backdrop -->
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" (click)="closeUploadDialog()"></div>
+
+      <!-- Modal Panel -->
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          
+          <!-- Modal Header -->
+          <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-900" id="modal-title">
+                Upload Document
+              </h3>
+              <button 
+                (click)="closeUploadDialog()"
+                class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <!-- Upload Component -->
+            <app-upload-document 
+              (uploadSuccess)="onUploadSuccess()"
+              (uploadCancel)="closeUploadDialog()">
+            </app-upload-document>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

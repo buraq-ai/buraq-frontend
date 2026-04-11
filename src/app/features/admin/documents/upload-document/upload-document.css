@@ -1,0 +1,25 @@
+/* Upload document component styles */
+.upload-container {
+  width: 100%;
+}
+
+/* Smooth transitions */
+.border-dashed {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Progress bar animation */
+.bg-blue-600 {
+  transition: width 0.3s ease-out;
+}
+
+/* Disabled button styles */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Hidden file input */
+input[type="file"].hidden {
+  display: none;
+}

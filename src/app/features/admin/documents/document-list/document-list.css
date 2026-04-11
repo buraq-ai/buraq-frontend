@@ -1,0 +1,22 @@
+/* Document list component styles */
+:host {
+  display: block;
+}
+
+/* Smooth transitions for interactive elements */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Table row hover effect */
+tr {
+  transition: background-color 0.15s ease;
+}
+
+/* Status badge base styles - complements Tailwind classes */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}

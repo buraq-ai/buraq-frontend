@@ -6,7 +6,16 @@
 
   <div class="flex items-center gap-6">
 
-    <!-- Navigation links — only visible for System Admin -->
+    <!-- Documents link — visible for Admin and System Admin -->
+    <ng-container *ngIf="authService.getUserRole() === 'ROLE_ADMIN' || authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
+      <a
+        routerLink="/documents"
+        class="text-sm text-gray-300 hover:text-white transition duration-200">
+        Documents
+      </a>
+    </ng-container>
+
+    <!-- Users link — only visible for System Admin -->
     <ng-container *ngIf="authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
       <a
         routerLink="/admin/users"
