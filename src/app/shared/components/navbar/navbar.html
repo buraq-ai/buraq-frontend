@@ -1,24 +1,32 @@
-<nav class="w-full bg-gray-900 text-white px-6 py-3 flex items-center justify-between shadow-md">
-
+﻿<nav class="w-full bg-gray-900 text-white px-6 py-3 flex items-center justify-between shadow-md">
   <div class="text-lg font-bold tracking-wide text-blue-400">
     Buraq AI
   </div>
-
   <div class="flex items-center gap-6">
 
-    <!-- Documents link — visible for Admin and System Admin -->
+    <!-- Dashboard link - visible for all authenticated users -->
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="text-white border-b border-blue-400"
+      class="text-sm text-gray-300 hover:text-white transition duration-200">
+      Assistant
+    </a>
+
+    <!-- Documents link - visible for Admin and System Admin -->
     <ng-container *ngIf="authService.getUserRole() === 'ROLE_ADMIN' || authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
       <a
         routerLink="/documents"
+        routerLinkActive="text-white border-b border-blue-400"
         class="text-sm text-gray-300 hover:text-white transition duration-200">
         Documents
       </a>
     </ng-container>
 
-    <!-- Users link — only visible for System Admin -->
+    <!-- Users link - only visible for System Admin -->
     <ng-container *ngIf="authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
       <a
         routerLink="/admin/users"
+        routerLinkActive="text-white border-b border-blue-400"
         class="text-sm text-gray-300 hover:text-white transition duration-200">
         Users
       </a>
@@ -35,5 +43,4 @@
     </button>
 
   </div>
-
 </nav>

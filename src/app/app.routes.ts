@@ -1,22 +1,22 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login';
-import { DashboardComponent } from './features/dashboard/dashboard/dashboard';
 import { UnauthorizedComponent } from './features/unauthorized/unauthorized';
 import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { CreateUserComponent } from './features/admin/users/create-user/create-user';
 import { EditUserComponent } from './features/admin/users/edit-user/edit-user';
 import { UserListComponent } from './features/admin/users/user-list/user-list';
+import { AiQueryComponent } from './features/dashboard/ai-query/ai-query';
 
 export const routes: Routes = [
     // Public routes
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-    // Authenticated routes
+    // Authenticated routes — accessible by all logged-in users
     {
         path: 'dashboard',
-        component: DashboardComponent,
+        component: AiQueryComponent,
         canActivate: [authGuard]
     },
 
@@ -35,21 +35,17 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard],
         data: { roles: ['ROLE_ADMIN', 'ROLE_SYSTEM_ADMIN'] }
     },
-
     {
         path: 'admin/users/create',
         component: CreateUserComponent,
         canActivate: [roleGuard],
         data: { roles: 'ROLE_SYSTEM_ADMIN' }
     },
-
     {
         path: 'admin/users/edit/:id',
         component: EditUserComponent,
-        canActivate: [roleGuard],
         data: { roles: 'ROLE_SYSTEM_ADMIN' }
     },
-
     {
         path: 'admin/users',
         component: UserListComponent,
