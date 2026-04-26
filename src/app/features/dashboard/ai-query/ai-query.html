@@ -126,7 +126,7 @@
       </div>
     </div>
 
-    <!-- SCENARIO B — No Answer Found -->
+        <!-- SCENARIO B — No Answer Found -->
     <div *ngIf="!currentResponse.has_answer" class="space-y-3">
 
       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
@@ -141,7 +141,43 @@
         </div>
       </div>
 
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+      <!-- Ticket Confirmation Box -->
+      <div *ngIf="currentResponse.ticket_created && currentResponse.ticket_id" 
+           class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <div>
+            <p class="text-sm text-blue-800 font-medium">No answer found in documents</p>
+            <p class="text-xs text-blue-600 mt-1">
+              A support ticket has been created automatically for your question.
+            </p>
+            <div class="mt-3 flex items-center gap-4">
+              <div>
+                <p class="text-xs text-blue-500">Ticket ID</p>
+                <p class="text-sm font-semibold text-blue-800">#{{ currentResponse.ticket_id }}</p>
+              </div>
+              <div>
+                <p class="text-xs text-blue-500">Status</p>
+                <p class="text-sm font-semibold text-blue-800">Open</p>
+              </div>
+            </div>
+            <a [routerLink]="['/tickets', currentResponse.ticket_id]"
+               class="inline-flex items-center gap-1 mt-3 text-sm font-medium text-blue-700 hover:text-blue-900 transition duration-200">
+              View My Ticket
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fallback: ticket not created (error case) -->
+      <div *ngIf="!currentResponse.ticket_created || !currentResponse.ticket_id"
+           class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
         <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>

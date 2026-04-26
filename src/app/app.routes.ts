@@ -7,6 +7,7 @@ import { CreateUserComponent } from './features/admin/users/create-user/create-u
 import { EditUserComponent } from './features/admin/users/edit-user/edit-user';
 import { UserListComponent } from './features/admin/users/user-list/user-list';
 import { AiQueryComponent } from './features/dashboard/ai-query/ai-query';
+import { TicketDetailComponent } from './features/tickets/ticket-detail/ticket-detail';
 
 export const routes: Routes = [
     // Public routes
@@ -17,6 +18,18 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         component: AiQueryComponent,
+        canActivate: [authGuard]
+    },
+    
+        // Tickets — authenticated employees
+    {
+        path: 'tickets',
+        loadComponent: () => import('./features/tickets/my-tickets/my-tickets').then(m => m.MyTicketsComponent),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'tickets/:id',
+        component: TicketDetailComponent,
         canActivate: [authGuard]
     },
 

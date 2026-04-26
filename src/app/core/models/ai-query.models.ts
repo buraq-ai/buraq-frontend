@@ -23,6 +23,7 @@ export interface AIQueryResponse {
   language_detected: string;
   should_create_ticket: boolean;
   ticket_created: boolean;
+  ticket_id: number | null;
 }
 
 // Represents a single entry in the session query history

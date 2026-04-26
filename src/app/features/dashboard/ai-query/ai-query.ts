@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { AiQueryService } from '../../../core/services/ai-query';
 import { AIQueryResponse, QueryHistoryItem } from '../../../core/models/ai-query.models';
+import { RouterModule } from '@angular/router';
 
 type UIState = 'idle' | 'loading' | 'result';
 
 @Component({
   selector: 'app-ai-query',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent, RouterModule],
   templateUrl: './ai-query.html',
   styleUrl: './ai-query.css',
 })
@@ -87,7 +88,8 @@ export class AiQueryComponent {
           confidence_score: 0,
           language_detected: this.selectedLanguage,
           should_create_ticket: true,
-          ticket_created: false
+          ticket_created: false,
+          ticket_id: null
         };
         this.uiState = 'result';
         this.cdr.detectChanges();

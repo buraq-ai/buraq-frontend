@@ -1,0 +1,59 @@
+<app-navbar></app-navbar>
+
+<main class="p-6 bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">My Tickets</h1>
+    <p class="text-sm text-gray-500 mt-1">
+      Tickets automatically created when the AI could not answer your questions.
+    </p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center gap-4">
+    <div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
+    <p class="text-sm text-gray-600">Loading your tickets...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && tickets.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+    <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    <p class="text-sm text-gray-500">You have no tickets yet.</p>
+    <a routerLink="/dashboard" class="text-sm text-blue-600 hover:text-blue-800 underline mt-2 inline-block">
+      Ask a question
+    </a>
+  </div>
+
+  <!-- Tickets Table -->
+  <div *ngIf="!isLoading && tickets.length > 0" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-200 bg-gray-50 text-left">
+          <th class="px-4 py-3 font-medium text-gray-500">Ticket ID</th>
+          <th class="px-4 py-3 font-medium text-gray-500">Title</th>
+          <th class="px-4 py-3 font-medium text-gray-500">Status</th>
+          <th class="px-4 py-3 font-medium text-gray-500">Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of tickets"
+            [routerLink]="['/tickets', ticket.id]"
+            class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition duration-150">
+          <td class="px-4 py-3 font-medium text-gray-800">#{{ ticket.id }}</td>
+          <td class="px-4 py-3 text-gray-700 max-w-xs truncate">{{ ticket.title }}</td>
+          <td class="px-4 py-3">
+            <span class="text-xs font-medium px-2.5 py-1 rounded-full" [class]="statusBadgeClass(ticket.status)">
+              {{ ticket.status === 'IN_PROGRESS' ? 'In Progress' : ticket.status | titlecase }}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-gray-500">{{ ticket.created_at | date: 'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>

@@ -12,6 +12,15 @@
       Assistant
     </a>
 
+
+        <!-- My Tickets - visible for all authenticated users -->
+    <a
+      routerLink="/tickets"
+      routerLinkActive="text-white border-b border-blue-400"
+      class="text-sm text-gray-300 hover:text-white transition duration-200">
+      My Tickets
+    </a>
+
     <!-- Documents link - visible for Admin and System Admin -->
     <ng-container *ngIf="authService.getUserRole() === 'ROLE_ADMIN' || authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
       <a
