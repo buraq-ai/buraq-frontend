@@ -33,6 +33,24 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
 
+        // Agent dashboard — Support Agent or System Admin
+    {
+        path: 'agent/tickets',
+        loadComponent: () => import('./features/agent/tickets/agent-ticket-list/agent-ticket-list')
+            .then(m => m.AgentTicketListComponent),
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ROLE_SUPPORT_AGENT', 'ROLE_SYSTEM_ADMIN'] }
+    },
+
+        // Admin ticket management — System Admin only
+    {
+        path: 'admin/tickets',
+        loadComponent: () => import('./features/admin/tickets/admin-ticket-list/admin-ticket-list')
+            .then(m => m.AdminTicketListComponent),
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ROLE_SYSTEM_ADMIN'] }
+    },
+
     // Admin only
     {
         path: 'admin',

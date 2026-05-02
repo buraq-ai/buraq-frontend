@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TicketResponse } from '../models/ticket.models';
+import { TicketResponse, AssignTicketRequest, PaginatedResponse, TicketFilterParams } from '../models/ticket.models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,6 @@ export class TicketService {
 
   /**
    * Get a specific ticket by ID.
-   * @param id - The ticket ID
-   * @returns Observable of TicketResponse
    */
   getTicketById(id: number): Observable<TicketResponse> {
     return this.http.get<TicketResponse>(`${this.apiUrl}/${id}`);
@@ -23,9 +21,69 @@ export class TicketService {
 
   /**
    * Get all tickets created by the currently authenticated employee.
-   * @returns Observable of TicketResponse array
    */
   getMyTickets(): Observable<TicketResponse[]> {
     return this.http.get<TicketResponse[]>(`${this.apiUrl}/my-tickets`);
+  }
+
+  /**
+   * Get tickets assigned to the current agent (paginated, filterable).
+   * Requires ROLE_SUPPORT_AGENT or ROLE_SYSTEM_ADMIN.
+   */
+  getAssignedTickets(filters: TicketFilterParams = {}): Observable<PaginatedResponse<TicketResponse>> {
+    let params = new HttpParams();
+
+    if (filters.status) {
+      params = params.set('status', filters.status);
+    }
+    if (filters.fromDate) {
+      params = params.set('fromDate', filters.fromDate);
+    }
+    if (filters.toDate) {
+      params = params.set('toDate', filters.toDate);
+    }
+    if (filters.page !== undefined) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.size !== undefined) {
+      params = params.set('size', filters.size.toString());
+    }
+
+    return this.http.get<PaginatedResponse<TicketResponse>>(`${this.apiUrl}/assigned`, { params });
+  }
+
+  /**
+   * Get all tickets in the system (paginated, filterable).
+   * Requires ROLE_SYSTEM_ADMIN only.
+   */
+  getAllTickets(filters: TicketFilterParams = {}): Observable<PaginatedResponse<TicketResponse>> {
+    let params = new HttpParams();
+
+    if (filters.status) {
+      params = params.set('status', filters.status);
+    }
+    if (filters.fromDate) {
+      params = params.set('fromDate', filters.fromDate);
+    }
+    if (filters.toDate) {
+      params = params.set('toDate', filters.toDate);
+    }
+    if (filters.page !== undefined) {
+      params = params.set('page', filters.page.toString());
+    }
+    if (filters.size !== undefined) {
+      params = params.set('size', filters.size.toString());
+    }
+
+    return this.http.get<PaginatedResponse<TicketResponse>>(`${this.apiUrl}/all`, { params });
+  }
+
+  /**
+   * Assign a ticket to a support agent.
+   * Requires ROLE_SYSTEM_ADMIN only.
+   */
+  assignTicket(ticketId: number, agentEmail: string): Observable<TicketResponse> {
+    const body: AssignTicketRequest = { agentEmail };
+    return this.http.patch<TicketResponse>(`${this.apiUrl}/${ticketId}/assign`, body);
   }
 }

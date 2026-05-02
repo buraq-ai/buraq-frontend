@@ -21,6 +21,26 @@
       My Tickets
     </a>
 
+        <!-- Assigned Tickets - visible for Support Agent and System Admin -->
+    <ng-container *ngIf="authService.getUserRole() === 'ROLE_SUPPORT_AGENT' || authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
+      <a
+        routerLink="/agent/tickets"
+        routerLinkActive="text-white border-b border-blue-400"
+        class="text-sm text-gray-300 hover:text-white transition duration-200">
+        Assigned Tickets
+      </a>
+    </ng-container>
+
+        <!-- All Tickets - visible for System Admin only -->
+    <ng-container *ngIf="authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
+      <a
+        routerLink="/admin/tickets"
+        routerLinkActive="text-white border-b border-blue-400"
+        class="text-sm text-gray-300 hover:text-white transition duration-200">
+        All Tickets
+      </a>
+    </ng-container>
+
     <!-- Documents link - visible for Admin and System Admin -->
     <ng-container *ngIf="authService.getUserRole() === 'ROLE_ADMIN' || authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
       <a
