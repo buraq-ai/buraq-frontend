@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TicketResponse, AssignTicketRequest, PaginatedResponse, TicketFilterParams } from '../models/ticket.models';
+import { TicketResponse, AssignTicketRequest, PaginatedResponse, TicketFilterParams, ConversationMessage } from '../models/ticket.models';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -85,5 +87,19 @@ export class TicketService {
   assignTicket(ticketId: number, agentEmail: string): Observable<TicketResponse> {
     const body: AssignTicketRequest = { agentEmail };
     return this.http.patch<TicketResponse>(`${this.apiUrl}/${ticketId}/assign`, body);
+  }
+
+    /**
+   * Get the conversation history for a ticket.
+   */
+  getTicketResponses(ticketId: number): Observable<ConversationMessage[]> {
+    return this.http.get<ConversationMessage[]>(`${this.apiUrl}/${ticketId}/responses`);
+  }
+
+  /**
+   * Add a response to a ticket's conversation.
+   */
+  addResponse(ticketId: number, responseText: string): Observable<ConversationMessage> {
+    return this.http.post<ConversationMessage>(`${this.apiUrl}/${ticketId}/responses`, { responseText });
   }
 }

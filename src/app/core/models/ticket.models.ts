@@ -31,3 +31,11 @@ export interface TicketFilterParams {
   page?: number;
   size?: number;
 }
+// A single message in a ticket's conversation thread
+export interface ConversationMessage {
+  id: number;
+  responseText: string;
+  respondedBy: string;
+  respondedAt: string;
+  isAgentResponse: boolean;
+}

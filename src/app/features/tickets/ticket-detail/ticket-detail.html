@@ -9,7 +9,7 @@
   </div>
 
   <!-- Error State -->
-  <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 rounded-lg p-4">
+  <div *ngIf="errorMessage && !isLoading" class="bg-red-50 border border-red-200 rounded-lg p-4">
     <p class="text-sm text-red-700">{{ errorMessage }}</p>
     <a routerLink="/dashboard" class="text-sm text-red-600 hover:text-red-800 underline mt-2 inline-block">
       Return to Dashboard
@@ -28,14 +28,14 @@
       </a>
       <h1 class="text-xl font-bold text-gray-800">Ticket #{{ ticket.id }}</h1>
       <span class="text-xs font-medium px-2.5 py-1 rounded-full" [class]="statusBadgeClass">
-        {{ ticket.status === 'IN_PROGRESS' ? 'In Progress' : ticket.status | titlecase }}
+        {{ ticket.status === 'IN_PROGRESS' ? 'In Progress' : (ticket.status | titlecase) }}
       </span>
     </div>
 
     <!-- Ticket Info Card -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-4">
 
-      <!-- Description (Original Question) -->
+      <!-- Original Question -->
       <div>
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Original Question</h3>
         <p class="text-sm text-gray-800 leading-relaxed">{{ ticket.description }}</p>
@@ -69,6 +69,91 @@
             {{ ticket.source === 'AI_FALLBACK' ? 'Created by AI Fallback' : 'Manual' }}
           </span>
         </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== CONVERSATION SECTION (NEW) ==================== -->
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-4">
+
+      <h3 class="text-sm font-semibold text-gray-700">Conversation</h3>
+
+      <!-- Messages Container -->
+      <div id="conversation-container" class="space-y-4 max-h-96 overflow-y-auto p-2">
+
+        <!-- Empty State -->
+        <div *ngIf="responses.length === 0" class="text-center py-8">
+          <p class="text-sm text-gray-400">No responses yet. Be the first to respond.</p>
+        </div>
+
+        <!-- Message Bubbles -->
+        <div *ngFor="let msg of responses" class="flex" [class.justify-end]="msg.isAgentResponse" [class.justify-start]="!msg.isAgentResponse">
+          <div
+            class="max-w-[75%] rounded-lg px-4 py-3"
+            [class.bg-blue-500]="msg.isAgentResponse"
+            [class.text-white]="msg.isAgentResponse"
+            [class.bg-gray-100]="!msg.isAgentResponse"
+            [class.text-gray-800]="!msg.isAgentResponse"
+          >
+            <p class="text-sm whitespace-pre-wrap">{{ msg.responseText }}</p>
+            <p
+              class="text-xs mt-1"
+              [class.text-blue-100]="msg.isAgentResponse"
+              [class.text-gray-400]="!msg.isAgentResponse"
+            >
+              {{ msg.respondedBy }} &bull; {{ msg.respondedAt | date: 'medium' }}
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Response Input Section -->
+      <div *ngIf="canRespond" class="border-t border-gray-100 pt-4 space-y-3">
+
+        <!-- Textarea -->
+        <textarea
+          [(ngModel)]="responseText"
+          placeholder="Type your response..."
+          maxlength="2000"
+          rows="3"
+          class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+          [disabled]="isSubmitting"
+        ></textarea>
+
+        <!-- Bottom bar: character counter + submit button -->
+        <div class="flex items-center justify-between">
+          <span
+            class="text-xs"
+            [class.text-gray-400]="remainingChars > 100"
+            [class.text-orange-500]="remainingChars <= 100 && remainingChars > 0"
+            [class.text-red-500]="remainingChars === 0"
+          >
+            {{ remainingChars }} characters remaining
+          </span>
+
+          <div class="flex items-center gap-3">
+            <!-- Submit Error -->
+            <p *ngIf="submitError" class="text-xs text-red-500">{{ submitError }}</p>
+
+            <!-- Submit Button -->
+            <button
+              (click)="submitResponse()"
+              [disabled]="!responseText.trim() || isSubmitting"
+              class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span *ngIf="isSubmitting" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              {{ isSubmitting ? 'Sending...' : 'Send Response' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Closed ticket notice -->
+      <div *ngIf="ticket.status === 'CLOSED'" class="border-t border-gray-100 pt-4">
+        <p class="text-sm text-center text-gray-400">This ticket is closed. Responses are no longer accepted.</p>
       </div>
 
     </div>
