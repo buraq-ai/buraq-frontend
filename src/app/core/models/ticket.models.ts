@@ -39,3 +39,18 @@ export interface ConversationMessage {
   respondedAt: string;
   isAgentResponse: boolean;
 }
+// Request DTO for updating ticket status
+export interface UpdateTicketStatusRequest {
+  status: string;
+  comment?: string;
+}
+
+// A single entry in the ticket's status change history
+export interface TicketStatusHistory {
+  id: number;
+  previous_status: string;
+  new_status: string;
+  changed_by: string;
+  changed_at: string;
+  comment?: string;
+}

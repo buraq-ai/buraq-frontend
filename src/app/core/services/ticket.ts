@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TicketResponse, AssignTicketRequest, PaginatedResponse, TicketFilterParams, ConversationMessage } from '../models/ticket.models';
+import { TicketResponse, AssignTicketRequest, PaginatedResponse, TicketFilterParams, ConversationMessage, TicketStatusHistory } from '../models/ticket.models';
 
 
 
@@ -101,5 +101,23 @@ export class TicketService {
    */
   addResponse(ticketId: number, responseText: string): Observable<ConversationMessage> {
     return this.http.post<ConversationMessage>(`${this.apiUrl}/${ticketId}/responses`, { responseText });
+  }
+
+    /**
+   * Update a ticket's status (close or reopen).
+   */
+  updateTicketStatus(ticketId: number, status: string, comment?: string): Observable<TicketResponse> {
+    const body: { status: string; comment?: string } = { status };
+    if (comment) {
+      body.comment = comment;
+    }
+    return this.http.patch<TicketResponse>(`${this.apiUrl}/${ticketId}/status`, body);
+  }
+
+  /**
+   * Get the status change history for a ticket.
+   */
+  getTicketHistory(ticketId: number): Observable<TicketStatusHistory[]> {
+    return this.http.get<TicketStatusHistory[]>(`${this.apiUrl}/${ticketId}/history`);
   }
 }

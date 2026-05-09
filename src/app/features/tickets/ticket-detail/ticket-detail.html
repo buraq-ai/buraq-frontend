@@ -73,7 +73,35 @@
 
     </div>
 
-    <!-- ==================== CONVERSATION SECTION (NEW) ==================== -->
+    <!-- ==================== ACTION BUTTONS ==================== -->
+
+    <!-- Close Ticket Button (visible to assigned agent / admin when IN_PROGRESS) -->
+    <div *ngIf="canClose" class="flex justify-end">
+      <button
+        (click)="openCloseModal()"
+        class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition duration-200"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        Close Ticket
+      </button>
+    </div>
+
+    <!-- Reopen Ticket Button (visible to system admin when CLOSED) -->
+    <div *ngIf="canReopen" class="flex justify-end">
+      <button
+        (click)="openReopenModal()"
+        class="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition duration-200"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Reopen Ticket
+      </button>
+    </div>
+
+    <!-- ==================== CONVERSATION SECTION ==================== -->
 
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-4">
 
@@ -158,6 +186,143 @@
 
     </div>
 
+    <!-- ==================== STATUS TIMELINE ==================== -->
+
+    <div *ngIf="statusHistory.length > 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-4">
+
+      <h3 class="text-sm font-semibold text-gray-700">Status History</h3>
+
+      <!-- Timeline -->
+      <div class="relative pl-6">
+        <!-- Vertical line -->
+        <div class="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gray-200"></div>
+
+        <!-- Timeline entries -->
+        <div *ngFor="let entry of statusHistory; let last = last" class="relative pb-5" [class.pb-0]="last">
+
+          <!-- Dot -->
+          <div class="absolute left-[-20px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-white"
+               [class]="getHistoryDotClass(entry)">
+          </div>
+
+          <!-- Content -->
+          <div>
+            <p class="text-sm font-medium text-gray-800">
+              {{ getStatusChangeLabel(entry) }}
+            </p>
+            <p class="text-xs text-gray-500 mt-0.5">
+              {{ entry.changed_by }} &bull; {{ entry.changed_at | date: 'medium' }}
+            </p>
+            <p *ngIf="entry.comment" class="text-xs text-gray-600 italic mt-1">
+              "{{ entry.comment }}"
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ==================== CLOSE TICKET MODAL ==================== -->
+
+  <div *ngIf="showCloseModal" class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-40" (click)="closeModal()"></div>
+    <!-- Modal -->
+    <div class="relative bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4 space-y-4">
+      <h3 class="text-lg font-semibold text-gray-800">Close Ticket</h3>
+
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Resolution notes (optional)</label>
+        <textarea
+          [(ngModel)]="modalComment"
+          placeholder="Describe how the issue was resolved..."
+          rows="3"
+          class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+          [disabled]="isModalSubmitting"
+        ></textarea>
+      </div>
+
+      <!-- Error -->
+      <p *ngIf="modalError" class="text-sm text-red-500">{{ modalError }}</p>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-3">
+        <button
+          (click)="closeModal()"
+          [disabled]="isModalSubmitting"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition duration-200 disabled:opacity-50"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="closeTicket()"
+          [disabled]="isModalSubmitting"
+          class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="isModalSubmitting" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          {{ isModalSubmitting ? 'Closing...' : 'Confirm Close' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== REOPEN TICKET MODAL ==================== -->
+
+  <div *ngIf="showReopenModal" class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-40" (click)="closeModal()"></div>
+    <!-- Modal -->
+    <div class="relative bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4 space-y-4">
+      <h3 class="text-lg font-semibold text-gray-800">Reopen Ticket</h3>
+
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Reason for reopening (optional)</label>
+        <textarea
+          [(ngModel)]="modalComment"
+          placeholder="Explain why the ticket is being reopened..."
+          rows="3"
+          class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+          [disabled]="isModalSubmitting"
+        ></textarea>
+      </div>
+
+      <!-- Error -->
+      <p *ngIf="modalError" class="text-sm text-red-500">{{ modalError }}</p>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-3">
+        <button
+          (click)="closeModal()"
+          [disabled]="isModalSubmitting"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition duration-200 disabled:opacity-50"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="reopenTicket()"
+          [disabled]="isModalSubmitting"
+          class="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="isModalSubmitting" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          {{ isModalSubmitting ? 'Reopening...' : 'Confirm Reopen' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+      <!-- Re-assign Button (visible to system admin when OPEN with assignee) -->
+  <div *ngIf="canReassign" class="flex justify-end">
+    <button
+      (click)="reassignTicket()"
+      [disabled]="isSubmitting"
+      class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <span *ngIf="isSubmitting" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+      {{ isSubmitting ? 'Assigning...' : 'Re-assign to In Progress' }}
+    </button>
   </div>
 
 </main>
