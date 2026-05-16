@@ -1,0 +1,119 @@
+<div class="min-h-screen bg-gray-950 text-gray-100 p-6">
+
+  <!-- Page Title -->
+  <h1 class="text-2xl font-bold mb-6">Ticket Statistics Dashboard</h1>
+
+  <!-- Date Range Filter -->
+  <div class="flex items-center gap-4 mb-6 bg-gray-900 p-4 rounded-lg">
+    <label class="text-sm text-gray-400">From:</label>
+    <input
+      type="date"
+      [(ngModel)]="fromDate"
+      class="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" />
+
+    <label class="text-sm text-gray-400">To:</label>
+    <input
+      type="date"
+      [(ngModel)]="toDate"
+      class="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" />
+
+    <button
+      (click)="applyDateFilter()"
+      class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded transition duration-200">
+      Apply
+    </button>
+
+    <button
+      (click)="resetDateFilter()"
+      class="bg-gray-700 hover:bg-gray-600 text-white text-sm px-4 py-2 rounded transition duration-200">
+      Reset
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-12">
+    <p class="text-gray-400">Loading statistics...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="bg-red-900/50 border border-red-700 rounded-lg p-4 mb-6">
+    <p class="text-red-300">{{ error }}</p>
+  </div>
+
+  <!-- Stats Content (only when data is loaded) -->
+  <ng-container *ngIf="!loading && ticketStats">
+
+    <!-- Summary Cards Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <!-- Total Tickets -->
+      <div class="bg-gray-900 rounded-lg p-5 border border-gray-800">
+        <p class="text-sm text-gray-400 mb-1">Total Tickets</p>
+        <p class="text-3xl font-bold text-white">{{ ticketStats.totalTickets }}</p>
+      </div>
+      <!-- Open -->
+      <div class="bg-gray-900 rounded-lg p-5 border border-gray-800">
+        <p class="text-sm text-gray-400 mb-1">Open</p>
+        <p class="text-3xl font-bold text-yellow-400">{{ ticketStats.openTickets }}</p>
+      </div>
+      <!-- In Progress -->
+      <div class="bg-gray-900 rounded-lg p-5 border border-gray-800">
+        <p class="text-sm text-gray-400 mb-1">In Progress</p>
+        <p class="text-3xl font-bold text-blue-400">{{ ticketStats.inProgressTickets }}</p>
+      </div>
+      <!-- Closed -->
+      <div class="bg-gray-900 rounded-lg p-5 border border-gray-800">
+        <p class="text-sm text-gray-400 mb-1">Closed</p>
+        <p class="text-3xl font-bold text-green-400">{{ ticketStats.closedTickets }}</p>
+      </div>
+    </div>
+
+    <!-- Secondary Metrics Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+      <!-- Average Resolution Time -->
+      <div class="bg-gray-900 rounded-lg p-5 border border-gray-800">
+        <p class="text-sm text-gray-400 mb-1">Average Resolution Time</p>
+        <p class="text-2xl font-bold text-white">
+          {{ ticketStats.averageResolutionTimeHours }} <span class="text-sm text-gray-400">hours</span>
+        </p>
+      </div>
+      <!-- SLA Breached -->
+      <div class="bg-gray-900 rounded-lg p-5 border"
+           [class.border-red-600]="ticketStats.slaBreachedTickets > 0"
+           [class.border-gray-800]="ticketStats.slaBreachedTickets === 0">
+        <p class="text-sm text-gray-400 mb-1">SLA Breached (48h+)</p>
+        <p class="text-2xl font-bold"
+           [class.text-red-500]="ticketStats.slaBreachedTickets > 0"
+           [class.text-white]="ticketStats.slaBreachedTickets === 0">
+          {{ ticketStats.slaBreachedTickets }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Line Chart: Tickets Created Per Day -->
+    <div class="bg-gray-900 rounded-lg p-5 border border-gray-800 mb-8">
+      <h3 class="text-lg font-semibold mb-4">Tickets Created Per Day</h3>
+      <div class="chart-container" style="position: relative; height: 300px;">
+        <canvas
+          baseChart
+          [type]="'line'"
+          [data]="lineChartData"
+          [options]="lineChartOptions">
+        </canvas>
+      </div>
+    </div>
+
+    <!-- Bar Chart: Tickets Per Agent -->
+    <div class="bg-gray-900 rounded-lg p-5 border border-gray-800">
+      <h3 class="text-lg font-semibold mb-4">Tickets Per Agent</h3>
+      <div class="chart-container" style="position: relative; height: 300px;">
+        <canvas
+          baseChart
+          [type]="'bar'"
+          [data]="barChartData"
+          [options]="barChartOptions">
+        </canvas>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

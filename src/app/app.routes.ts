@@ -20,6 +20,15 @@ export const routes: Routes = [
         component: AiQueryComponent,
         canActivate: [authGuard]
     },
+
+    // Ticket statistics dashboard — System Admin only
+    {
+        path: 'dashboard/stats',
+        loadComponent: () => import('./features/dashboard/ticket-stats/ticket-stats')
+            .then(m => m.TicketStatsComponent),
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ROLE_SYSTEM_ADMIN'] }
+    },
     
         // Tickets — authenticated employees
     {
