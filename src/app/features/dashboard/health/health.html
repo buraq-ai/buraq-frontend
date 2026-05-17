@@ -1,0 +1,73 @@
+<div class="p-6 max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">System Health Monitoring</h1>
+    <p class="text-gray-600 mt-1">Real-time status of all system components</p>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="flex items-center justify-center py-20">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    <span class="ml-3 text-gray-600">Checking system health...</span>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+    <p class="text-red-800">{{ error }}</p>
+  </div>
+
+  <!-- Main content -->
+  <ng-container *ngIf="systemHealth && !loading">
+    <!-- Alert banner when any service is DOWN -->
+    <div *ngIf="hasDownService()" class="bg-red-50 border border-red-300 rounded-lg p-4 mb-6 flex items-center">
+      <span class="text-xl mr-3">⚠️</span>
+      <div>
+        <p class="text-red-800 font-semibold">SYSTEM ALERT</p>
+        <p class="text-red-700 text-sm">One or more services are currently unavailable. Please investigate immediately.</p>
+      </div>
+    </div>
+
+    <!-- Service health grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div
+        *ngFor="let service of systemHealth.services"
+        class="rounded-lg border-2 p-5 transition-colors"
+        [ngClass]="{
+          'border-green-400 bg-green-50': service.status === 'UP',
+          'border-red-400 bg-red-50': service.status === 'DOWN'
+        }"
+      >
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold text-gray-900">{{ service.serviceName }}</h3>
+          <span class="text-lg">{{ getStatusDot(service) }}</span>
+        </div>
+
+        <div class="space-y-1 text-sm">
+          <p [ngClass]="{
+            'text-green-700': service.status === 'UP',
+            'text-red-700': service.status === 'DOWN'
+          }">
+            ● {{ service.status }}
+          </p>
+          <p class="text-gray-600">
+            Response: {{ formatResponseTime(service) }}
+          </p>
+          <p class="text-gray-500 text-xs truncate" [title]="service.details">
+            {{ service.details }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer: timestamp and countdown -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
+      <p>
+        Last updated:
+        <span class="font-medium text-gray-700">{{ systemHealth.checkedAt | date:'medium' }}</span>
+      </p>
+      <p class="mt-1 sm:mt-0">
+        Refreshing in <span class="font-medium text-gray-700">{{ countdown }}</span> seconds
+      </p>
+    </div>
+  </ng-container>
+</div>

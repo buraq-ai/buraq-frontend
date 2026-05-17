@@ -38,6 +38,15 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard],
         data: { roles: ['ROLE_SYSTEM_ADMIN'] }
     },
+
+        // System Health dashboard — System Admin only
+    {
+        path: 'dashboard/health',
+        loadComponent: () => import('./features/dashboard/health/health')
+            .then(m => m.HealthComponent),
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ROLE_SYSTEM_ADMIN'] }
+    },
         
         // Tickets — authenticated employees
     {

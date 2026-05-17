@@ -61,6 +61,16 @@
       </a>
     </ng-container>
 
+            <!-- System Health - visible for System Admin only -->
+    <ng-container *ngIf="authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
+      <a
+        routerLink="/dashboard/health"
+        routerLinkActive="text-white border-b border-blue-400"
+        class="text-sm text-gray-300 hover:text-white transition duration-200">
+        Health
+      </a>
+    </ng-container>
+
     <!-- Documents link - visible for Admin and System Admin -->
     <ng-container *ngIf="authService.getUserRole() === 'ROLE_ADMIN' || authService.getUserRole() === 'ROLE_SYSTEM_ADMIN'">
       <a

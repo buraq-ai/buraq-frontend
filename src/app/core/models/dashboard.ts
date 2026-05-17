@@ -38,3 +38,17 @@ export interface AIStats {
   languageBreakdown: Record<string, number>;
   estimatedOpenAICost: number;
 }
+
+export interface ServiceHealth {
+  serviceName: string;
+  status: string;          // "UP" or "DOWN"
+  responseTimeMs: number | null;  // null when service is DOWN
+  details: string;
+  lastCheckedAt: string;
+}
+
+export interface SystemHealth {
+  overallStatus: string;   // "UP" or "DOWN"
+  services: ServiceHealth[];
+  checkedAt: string;
+}
