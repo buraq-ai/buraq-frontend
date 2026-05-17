@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TicketStats, AgentStats } from '../models/dashboard';
+import { TicketStats, AgentStats, AIStats } from '../models/dashboard';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +27,9 @@ export class DashboardService {
 
   getAgentStats(): Observable<AgentStats[]> {
     return this.http.get<AgentStats[]>(`${this.apiUrl}/ticket-stats/by-agent`);
+  }
+
+  getAIStats(): Observable<AIStats> {
+    return this.http.get<AIStats>(`${this.apiUrl}/ai-stats`);
   }
 }

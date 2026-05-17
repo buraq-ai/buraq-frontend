@@ -20,3 +20,21 @@ export interface AgentStats {
   averageResolutionTimeHours: number;
   resolutionRate: number;
 }
+
+export interface DailyQueryCount {
+  date: string;
+  count: number;
+}
+
+export interface AIStats {
+  totalQueries: number;
+  queriesWithAnswer: number;
+  queriesWithoutAnswer: number;
+  answerRate: number;
+  averageResponseTimeMs: number;
+  averageConfidenceScore: number;
+  queriesPerDay: DailyQueryCount[];
+  providerBreakdown: Record<string, number>;
+  languageBreakdown: Record<string, number>;
+  estimatedOpenAICost: number;
+}

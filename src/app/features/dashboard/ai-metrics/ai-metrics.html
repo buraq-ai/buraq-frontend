@@ -1,0 +1,98 @@
+<!-- Loading state -->
+<div *ngIf="isLoading" class="flex items-center justify-center h-64">
+  <p class="text-gray-400 text-lg">Loading AI metrics...</p>
+</div>
+
+<!-- Main content -->
+<div *ngIf="!isLoading" class="p-6 space-y-6">
+
+  <!-- Page title -->
+  <h1 class="text-2xl font-bold text-white">AI Usage Metrics</h1>
+
+  <!-- Cost warning banner -->
+  <div
+    *ngIf="showCostWarning"
+    class="bg-yellow-600/20 border border-yellow-500 text-yellow-200 px-4 py-3 rounded-lg flex items-center gap-3">
+    <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M12 9v2m0 4h.01M12 3l9.66 16.5H2.34L12 3z" />
+    </svg>
+    <span class="text-sm font-medium">
+      OpenAI API cost is approaching significant levels. Consider switching to Ollama.
+    </span>
+  </div>
+
+  <!-- Summary cards row -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+    <!-- Total Queries -->
+    <div class="bg-gray-800 border border-gray-700 rounded-xl p-5">
+      <p class="text-sm text-gray-400 uppercase tracking-wide">Total Queries</p>
+      <p class="text-3xl font-bold text-white mt-1">{{ totalQueries }}</p>
+    </div>
+
+    <!-- Answer Rate -->
+    <div class="bg-gray-800 border border-gray-700 rounded-xl p-5">
+      <p class="text-sm text-gray-400 uppercase tracking-wide">Answer Rate</p>
+      <p class="text-3xl font-bold text-white mt-1">{{ answerRate }}%</p>
+    </div>
+
+    <!-- Avg Response Time -->
+    <div class="bg-gray-800 border border-gray-700 rounded-xl p-5">
+      <p class="text-sm text-gray-400 uppercase tracking-wide">Avg Response</p>
+      <p class="text-3xl font-bold text-white mt-1">{{ averageResponseTimeMs | number }}ms</p>
+    </div>
+
+    <!-- Estimated Cost -->
+    <div class="bg-gray-800 border border-gray-700 rounded-xl p-5">
+      <p class="text-sm text-gray-400 uppercase tracking-wide">Estimated Cost</p>
+      <p class="text-3xl font-bold text-white mt-1">${{ estimatedOpenAICost | number:'1.2-2' }}</p>
+    </div>
+
+  </div>
+
+  <!-- Line chart: Queries Per Day -->
+  <div class="bg-gray-800 border border-gray-700 rounded-xl p-5">
+    <h2 class="text-lg font-semibold text-white mb-4">Queries Per Day (Last 30 Days)</h2>
+    <div class="h-72">
+      <canvas
+        baseChart
+        [type]="'line'"
+        [data]="lineChartData"
+        [options]="lineChartOptions">
+      </canvas>
+    </div>
+  </div>
+
+  <!-- Pie charts row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Provider Breakdown -->
+    <div class="bg-gray-800 border border-gray-700 rounded-xl p-5">
+      <h2 class="text-lg font-semibold text-white mb-4">LLM Provider Breakdown</h2>
+      <div class="h-64">
+        <canvas
+          baseChart
+          [type]="'pie'"
+          [data]="providerPieData"
+          [options]="providerPieOptions">
+        </canvas>
+      </div>
+    </div>
+
+    <!-- Language Breakdown -->
+    <div class="bg-gray-800 border border-gray-700 rounded-xl p-5">
+      <h2 class="text-lg font-semibold text-white mb-4">Language Breakdown</h2>
+      <div class="h-64">
+        <canvas
+          baseChart
+          [type]="'pie'"
+          [data]="languagePieData"
+          [options]="languagePieOptions">
+        </canvas>
+      </div>
+    </div>
+
+  </div>
+
+</div>

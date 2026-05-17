@@ -29,7 +29,16 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard],
         data: { roles: ['ROLE_SYSTEM_ADMIN'] }
     },
-    
+
+    // AI Metrics dashboard — System Admin only
+    {
+        path: 'dashboard/ai-metrics',
+        loadComponent: () => import('./features/dashboard/ai-metrics/ai-metrics')
+            .then(m => m.AiMetricsComponent),
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ROLE_SYSTEM_ADMIN'] }
+    },
+        
         // Tickets — authenticated employees
     {
         path: 'tickets',
