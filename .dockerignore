@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# Node modules and build output (will be built in Docker)
+node_modules/
+dist/
+
+# IDE
+.vscode/
+.angular/
+*.iml
+
+# Documentation
+README.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+*.env
