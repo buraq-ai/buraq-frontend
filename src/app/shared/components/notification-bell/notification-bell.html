@@ -1,0 +1,84 @@
+<!-- Bell Icon with Badge -->
+<div class="relative">
+  <!-- Bell Button -->
+  <button
+    (click)="toggleDropdown()"
+    class="relative p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
+    aria-label="Notifications">
+    <!-- Bell SVG Icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+    </svg>
+
+    <!-- Unread Badge -->
+    <span
+      *ngIf="unreadCount > 0"
+      class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+      {{ unreadCount > 99 ? '99+' : unreadCount }}
+    </span>
+  </button>
+
+  <!-- Dropdown Panel -->
+  <div
+    *ngIf="showDropdown"
+    class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-y-auto"
+    (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+      <h3 class="font-semibold text-gray-800 text-sm">Notifications</h3>
+      <button
+        *ngIf="unreadCount > 0"
+        (click)="markAllAsRead()"
+        class="text-xs text-blue-600 hover:text-blue-800 font-medium">
+        Mark all ✓
+      </button>
+    </div>
+
+    <!-- Notification List -->
+    <div *ngIf="notifications.length > 0; else emptyState">
+      <div
+        *ngFor="let notification of notifications"
+        (click)="markAsRead(notification.id, notification.ticketId)"
+        class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-b-0"
+        [class.bg-blue-50]="!notification.isRead"
+        [class.border-l-4]="!notification.isRead"
+        [class.border-l-blue-500]="!notification.isRead"
+        [class.pl-3]="!notification.isRead">
+        <div class="flex items-start gap-2">
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-gray-800 truncate">
+              {{ notification.title }}
+            </p>
+            <p class="text-xs text-gray-500 mt-0.5 line-clamp-2">
+              {{ notification.message }}
+            </p>
+            <p class="text-xs text-gray-400 mt-1">
+              {{ getRelativeTime(notification.createdAt) }}
+            </p>
+          </div>
+          <!-- Unread Dot -->
+          <span
+            *ngIf="!notification.isRead"
+            class="h-2 w-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0">
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <ng-template #emptyState>
+      <div class="px-4 py-8 text-center text-gray-400 text-sm">
+        No notifications yet
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Backdrop to close dropdown when clicking outside -->
+<div
+  *ngIf="showDropdown"
+  class="fixed inset-0 z-40"
+  (click)="closeDropdown()">
+</div>

@@ -1,0 +1,12 @@
+/* Smooth transition for the dropdown */
+.relative {
+  position: relative;
+}
+
+/* Line clamp fallback for browsers that don't support Tailwind's line-clamp-2 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

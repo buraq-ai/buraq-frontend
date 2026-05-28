@@ -5,6 +5,7 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { AiQueryService } from '../../../core/services/ai-query';
 import { AIQueryResponse, QueryHistoryItem } from '../../../core/models/ai-query.models';
 import { RouterModule } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification';
 
 type UIState = 'idle' | 'loading' | 'result';
 
@@ -36,8 +37,9 @@ export class AiQueryComponent {
 
   constructor(
     private aiQueryService: AiQueryService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
+  ) { }
 
   // ── Getters ────────────────────────────────────────────────────────────────
 
@@ -78,6 +80,13 @@ export class AiQueryComponent {
           timestamp: new Date()
         });
         this.cdr.detectChanges();
+
+        // Refresh notification count if a ticket was created
+        if (response.ticket_created) {
+          this.notificationService.refreshUnreadCount();
+          // Small delay to let the HTTP call complete, then trigger change detection
+          setTimeout(() => this.cdr.detectChanges(), 500);
+        }
       },
       error: () => {
         this.currentResponse = {
