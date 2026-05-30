@@ -28,8 +28,8 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npx ng test --watch=false --browsers=ChromeHeadless
-
+        run: npx vitest run
+      
       - name: Build production
         run: npx ng build --configuration production
 
