@@ -8,7 +8,7 @@ import { TicketStats, AgentStats, AIStats, SystemHealth } from '../models/dashbo
 })
 export class DashboardService {
 
-  private readonly apiUrl = 'http://localhost:8081/api/dashboard';
+  private readonly apiUrl = '/api/dashboard';
 
   constructor(private http: HttpClient) {}
 

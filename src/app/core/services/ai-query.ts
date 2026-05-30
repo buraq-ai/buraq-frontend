@@ -8,7 +8,7 @@ import { AIQueryRequest, AIQueryResponse } from '../models/ai-query.models';
 })
 export class AiQueryService {
 
-  private readonly apiUrl = 'http://localhost:8081/api/ai';
+  private readonly apiUrl = '/api/ai';
 
   constructor(private http: HttpClient) {}
 

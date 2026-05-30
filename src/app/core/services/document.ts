@@ -17,7 +17,7 @@ export interface DocumentResponse {
 })
 export class DocumentService {
 
-  private readonly apiUrl = 'http://localhost:8081/api/documents';
+  private readonly apiUrl = '/api/documents';
 
   constructor(private http: HttpClient) {}
 

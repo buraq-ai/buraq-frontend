@@ -40,7 +40,7 @@ export interface UserSearchFilters {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8081/api/admin';
+  private apiUrl = '/api/admin';
 
   constructor(private http: HttpClient) {}
 

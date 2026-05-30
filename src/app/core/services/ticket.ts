@@ -10,7 +10,7 @@ import { TicketResponse, AssignTicketRequest, PaginatedResponse, TicketFilterPar
 })
 export class TicketService {
 
-  private readonly apiUrl = 'http://localhost:8081/api/tickets';
+  private readonly apiUrl = '/api/tickets';
 
   constructor(private http: HttpClient) {}
 

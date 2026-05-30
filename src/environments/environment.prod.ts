@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api'                          // Production: relative path
+  apiUrl: ''                           // Empty: requests go to same origin, paths already include /api/
 };
