@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { UploadDocument } from './upload-document';
 
 describe('UploadDocument', () => {
@@ -11,7 +10,6 @@ describe('UploadDocument', () => {
       imports: [UploadDocument]
     })
     .compileComponents();
-
     fixture = TestBed.createComponent(UploadDocument);
     component = fixture.componentInstance;
     await fixture.whenStable();

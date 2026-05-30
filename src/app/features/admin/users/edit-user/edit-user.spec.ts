@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { EditUserComponent } from './edit-user';
 
-import { EditUser } from './edit-user';
-
-describe('EditUser', () => {
-  let component: EditUser;
-  let fixture: ComponentFixture<EditUser>;
+describe('EditUserComponent', () => {
+  let component: EditUserComponent;
+  let fixture: ComponentFixture<EditUserComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditUser]
+      imports: [EditUserComponent],
+      providers: [provideRouter([])]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(EditUser);
+    fixture = TestBed.createComponent(EditUserComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

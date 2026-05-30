@@ -1,18 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AiMetricsComponent } from './ai-metrics';
 
-import { AiMetrics } from './ai-metrics';
-
-describe('AiMetrics', () => {
-  let component: AiMetrics;
-  let fixture: ComponentFixture<AiMetrics>;
+describe('AiMetricsComponent', () => {
+  let component: AiMetricsComponent;
+  let fixture: ComponentFixture<AiMetricsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AiMetrics]
+      imports: [AiMetricsComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(AiMetrics);
+    fixture = TestBed.createComponent(AiMetricsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

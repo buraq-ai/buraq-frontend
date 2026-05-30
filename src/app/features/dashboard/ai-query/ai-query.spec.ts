@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { AiQueryComponent } from './ai-query';
 
-import { AiQuery } from './ai-query';
-
-describe('AiQuery', () => {
-  let component: AiQuery;
-  let fixture: ComponentFixture<AiQuery>;
+describe('AiQueryComponent', () => {
+  let component: AiQueryComponent;
+  let fixture: ComponentFixture<AiQueryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AiQuery]
+      imports: [AiQueryComponent],
+      providers: [provideRouter([])]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(AiQuery);
+    fixture = TestBed.createComponent(AiQueryComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

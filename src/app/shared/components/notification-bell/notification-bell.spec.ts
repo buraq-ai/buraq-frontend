@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NotificationBell } from './notification-bell';
 
 describe('NotificationBell', () => {
@@ -11,7 +10,6 @@ describe('NotificationBell', () => {
       imports: [NotificationBell]
     })
     .compileComponents();
-
     fixture = TestBed.createComponent(NotificationBell);
     component = fixture.componentInstance;
     await fixture.whenStable();

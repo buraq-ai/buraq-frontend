@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DocumentList } from './document-list';
 
 describe('DocumentList', () => {
@@ -11,7 +10,6 @@ describe('DocumentList', () => {
       imports: [DocumentList]
     })
     .compileComponents();
-
     fixture = TestBed.createComponent(DocumentList);
     component = fixture.componentInstance;
     await fixture.whenStable();

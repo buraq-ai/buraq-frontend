@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npx vitest run
+        run: npx ng test --watch=false
       
       - name: Build production
         run: npx ng build --configuration production
